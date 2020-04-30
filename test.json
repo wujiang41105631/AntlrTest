@@ -1,0 +1,57 @@
+{
+  "table": "gxd_v5",
+  "rules": [
+    {
+      "name": "juece1",
+      "type": "meta",
+      "input": "crawler_tb_balance",
+      "output": "score",
+      "execs": [
+        {
+          "contition": "crawler_tb_balance == null || crawler_tb_balance<0",
+          "action": "score=22"
+        },
+        {
+          "contition": "crawler_tb_balance == 9999990",
+          "action": "score=22"
+        },
+        {
+          "contition": "crawler_tb_balance >0 && crawler_tb_balance == <6800",
+          "action": "score=22"
+        }
+      ]
+    },
+    {
+      "name": "juece2",
+      "type": "meta",
+      "input": "crawler_tb_balance_over_dep_amt",
+      "output": "score,passFlag",
+      "execs": [
+        {
+          "contition": "crawler_tb_balance == null || crawler_tb_balance<0",
+          "action": "score=22,passFlag=pass"
+        },
+        {
+          "contition": "crawler_tb_balance == 9999990",
+          "action": "score=22,passFlag=refuse"
+        },
+        {
+          "contition": "crawler_tb_balance >0 && crawler_tb_balance == <6800",
+          "action": "score=22,passFlag=pass"
+        }
+      ]
+    },
+    {
+      "name": "juece3",
+      "type": "aggregation",
+      "input": "juece1.score,juece2.score",
+      "output": "scorescore",
+      "execs": [
+        {
+          "contition": "1==1",
+          "action": "score=juece1.score+juece2.score"
+        }
+      ]
+    }
+  ]
+}
